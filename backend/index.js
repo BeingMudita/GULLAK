@@ -11,6 +11,7 @@ const {authenticateToken}= require('./utilities');
 mongoose.connect(config.connectionString);
 
 const User = require('./models/user.model');
+const Memory = require('./models/memory.model');
 
 const app = express();
 app.use(express.json());
@@ -95,7 +96,37 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 });
 
 //Add Memory
+app.post("/add-memory", authenticateToken, async (req, res) => {
+    const { title, story, withPerson, imageUrl, memoryDate } = req.body;
+    const { userId } = req.user;
 
+    // Validate required fields
+    if (!title || !story || !withPerson || !imageUrl || !memoryDate) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Convert memory date from milliseconds to Date object
+    const parsedMemoryDate = new Date(Number(memoryDate));
+    if (isNaN(parsedMemoryDate.getTime())) {
+        return res.status(400).json({ message: "Invalid memory date" });
+    }
+
+    try {
+        const memory = new Memory({
+            title,
+            story,
+            withPerson,
+            imageUrl,
+            memoryDate: parsedMemoryDate,
+            userId
+        });
+        await memory.save();
+        res.status(201).json({ story: memory, message: "Memory added successfully" });
+    } catch (err) {
+        console.error("Error adding memory:", err);
+        res.status(500).json({ message: "An error occurred", error: err.message });
+    }
+});
 
 app.listen(8000);
 module.exports = app;
