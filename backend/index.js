@@ -1,11 +1,12 @@
 require('dotenv').config();
 
-const cinfig = require('./config');
+const config = require('./config');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { default: mongoose } = require('mongoose');
+const {authenticateToken}= require('./utilities');
 
 mongoose.connect(config.connectionString);
 
@@ -16,7 +17,7 @@ app.use(express.json());
 app.use(cors({origin: "*"}));
 
 //Create Account
-app.get("/create-account", async (req, res) => {
+app.post("/create-account", async (req, res) => {
     const {fullName, email, password} = req.body;
 
     if (!fullName || !email || !password) {
@@ -47,6 +48,53 @@ app.get("/create-account", async (req, res) => {
         message:"Registration successful"
     })
 });
+
+//Login Account
+app.post("/login", async (req, res) => {
+    const {email, password} = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({message: "All fields are required"});
+    }
+
+    const user = await User.findOne({email});
+    if (!user) {
+        return res.status(400).json({message: "Invalid credentials"});
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(400).json({message: "Invalid credentials"});
+    }
+    const accessToken = jwt.sign({
+        userId: user._id
+    }, process.env.ACCESS_TOKEN_SECRET,
+    {expiresIn: "72h"});
+    return res.json({
+        error: false,
+        user: {
+            fullName: user.fullName,
+            email: user.email
+        },
+        accessToken,
+        message: "Login successful"
+    })
+});
+
+//Get User
+app.get("/get-user", authenticateToken, async (req, res) => {
+    const {userId} = req.user;
+    const isUser = await User.findOne({ _id: userId });
+    if (!isUser) {
+        return res.status(400).json({message: "User not found"});
+    }
+    return res.json({
+        error: false,
+        user: isUser
+    });
+});
+
+//Add Memory
 
 
 app.listen(8000);
