@@ -7,11 +7,14 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { default: mongoose } = require('mongoose');
 const {authenticateToken}= require('./utilities');
+const fs = require('fs');
+const path = require('path');
 
 mongoose.connect(config.connectionString);
 
 const User = require('./models/user.model');
 const Memory = require('./models/memory.model');
+const upload = require('./multer');
 
 const app = express();
 app.use(express.json());
@@ -127,6 +130,55 @@ app.post("/add-memory", authenticateToken, async (req, res) => {
         res.status(500).json({ message: "An error occurred", error: err.message });
     }
 });
+
+//Get Memory
+app.get("/get-memory", authenticateToken, async (req, res) => {
+    const {userId} = req.user;
+    try{
+        const memory = await Memory.find({userId: userId}).sort({isFavorite: -1});
+        res.status(200).json({stories: memory});
+    } catch (err) {
+        res.status(500).json({message: "An error occurred", error: err.message});
+    }
+});
+
+//Route to handle image upload
+app.post("/upload-image", upload.single("image"), async (req, res)=>{
+    try{
+        if(!req.file){
+            return res.status(400).json({message: "Please upload an image"});
+        }
+        const imageUrl = `http://localhost:8000/uploads/${req.file.filename}`;
+        res.status(200).json({imageUrl});
+    }catch(err){
+        res.status(500).json({message: "An error occurred", error: err.message});
+    }
+});
+
+//Delete an image from memory
+app.delete("/delete-image", authenticateToken, async (req, res) => {
+    const { imageUrl } = req.query;
+    if(!imageUrl){
+        return res.status(400).json({message: "Image URL is required"});
+    }
+    try{
+        const filename = path.basename(imageUrl);
+        const filePath = path.join(__dirname, "uploads", filename);
+        if(fs.existsSync(filePath)){
+            fs.unlinkSync(filePath);
+            return res.status(200).json({message: "Image deleted successfully"});
+        }else{ 
+            return res.status(404).json({message: "Image not found"});
+        }
+    }catch(err){
+        res.status(500).json({message: "An error occurred", error: err.message});
+    }
+});
+
+
+//Serve static files from the uploads and assests directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 app.listen(8000);
 module.exports = app;
