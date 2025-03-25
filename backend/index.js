@@ -175,6 +175,94 @@ app.delete("/delete-image", authenticateToken, async (req, res) => {
     }
 });
 
+//Edit Memory
+app.put("/edit-memory/:id", authenticateToken, async (req, res) => {
+    const { title, story, withPerson, imageUrl, memoryDate } = req.body;
+    const { id } = req.params;
+    const {userId} = req.user;
+
+    // Validate required fields
+    if (!title || !story || !withPerson || !imageUrl || !memoryDate) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Convert memory date from milliseconds to Date object
+    const parsedMemoryDate = new Date(memoryDate);
+    try{
+        //Find memory by id and ensure it belongs to the authenticated user
+        const memory = await Memory.findOne({ _id: id, userId: userId });
+        if (!memory) {
+            return res.status(404).json({ message: "Memory not found" });
+        }
+
+        const placeholderimage = `http://localhost:8000/assests/placeholder.jpg`;
+
+        memory.title = title;
+        memory.story = story;
+        memory.withPerson = withPerson;
+        memory.imageUrl = imageUrl || placeholderimage;
+        memory.memoryDate = parsedMemoryDate;
+
+        await memory.save();
+        return res.status(200).json({ message: "Memory updated successfully" });
+    }catch(err){
+        res.status(500).json({message: "An error occurred", error: err.message});
+    }
+});
+
+//Delete Memory
+app.delete("/delete-memory/:id", authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.user;
+    try{
+        const memory = await Memory.findOne({ _id: id, userId: userId });
+        if (!memory) {
+            return res.status(404).json({ message: "Memory not found" });
+        }
+
+        //Delete memory
+        await memory.deleteOne({ _id: id, userId: userId });
+        const imageUrl = memory.imageUrl;
+        const filename = path.basename(imageUrl);
+        const filePath = path.join(__dirname, "uploads", filename);
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error("Error deleting image:", err);
+            }
+        });
+        res.status(200).json({ message: "Memory deleted successfully" });
+    }catch(err){
+        res.status(500).json({message: "An error occurred", error: err.message});
+    }
+});
+
+//Favorite Memory
+app.put("/update-is-favourite/:id", authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.user;
+    const { isFavorite } = req.body;
+
+    if (typeof isFavorite !== "boolean") {
+        return res.status(400).json({ message: "Invalid value for isFavorite" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Invalid memory ID" });
+    }
+
+    try {
+        const memory = await Memory.findOne({ _id: id, userId });
+        if (!memory) {
+            return res.status(404).json({ message: "Memory not found" });
+        }
+
+        memory.isFavorite = isFavorite;
+        await memory.save();
+        res.status(200).json({ message: "Memory updated successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "An error occurred", error: err.message });
+    }
+});
 
 //Serve static files from the uploads and assests directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
