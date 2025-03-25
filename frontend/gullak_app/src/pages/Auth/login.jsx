@@ -51,12 +51,12 @@ const Login = () => {
       <div className="login-ui-box right-10 -top-40"></div>
       <div className="login-ui-box -bottom-40 right-1/2"></div>
       <div className="container h-screen flex items-center justify-center px-20 mx-auto">
-        <div className="w-2/4 h-[90vh] flex items-end bg-login-bg-img bg-cover bg-center rounded-lg p-10 z-50">
-          <h4 className="text-5xl font-semibold leading-[58px]">
-            Capture Your <br/>memory
+      <div className="w-2/4 h-[90vh] bg-login-bg-img bg-cover bg-center rounded-lg p-10 z-50 flex flex-col justify-end">
+          <h4 className="text-5xl font-semibold leading-[58px] mb-2">
+            Capture your<br /> Memories
           </h4>
-          <p className="text-[15px] leading-6 pr-7 mt-4">
-            A digital diary for your memories... 
+          <p className="text-[15px] leading-6 pr-7">
+            A place to store your memories and share them with your loved ones.
           </p>
         </div>
 
@@ -81,7 +81,7 @@ const Login = () => {
             type="submit"
             className="btn-primary btn-light"
             onClick={()=>{
-              Navigate("/signup");
+              navigate("/signup");
             }}>
               CREATE ACCOUNT
             </button>
