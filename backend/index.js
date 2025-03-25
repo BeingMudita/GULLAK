@@ -264,6 +264,62 @@ app.put("/update-is-favourite/:id", authenticateToken, async (req, res) => {
     }
 });
 
+
+//Search memory
+app.get("/search", authenticateToken, async (req, res) => {
+    const {query} = req.query;
+    const {userId} = req.user;
+    if(!query){
+        return res.status(400).json({message: "Query is required"});
+    }
+    try{
+        const serachResults = await Memory.find({
+            userId: userId,
+            $or: [
+                {title: { $regex: query, $options: 'i' } },
+                {story: { $regex: query, $options: 'i' } },
+                {withPerson: { $regex: query, $options: 'i' } }
+            ],
+        }).sort({isFavorite: -1});
+
+        return res.status(200).json({stories: serachResults});
+    }catch(err){
+        return res.status(500).json({message: "An error occurred", error: err.message});
+    }
+});
+
+//Filter memory by date
+app.get("/memory/filter", authenticateToken, async (req, res) => {
+    const { startDate, endDate } = req.query;
+    const { userId } = req.user;
+
+    if (!startDate || !endDate) {
+        return res.status(400).json({ message: "Start date and end date are required" });
+    }
+
+    const parsedStartDate = new Date(startDate);
+    const parsedEndDate = new Date(endDate);
+
+    if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
+        return res.status(400).json({ message: "Invalid date format" });
+    }
+
+    try {
+        const filteredMemories = await Memory.find({
+            userId: userId,
+            memoryDate: {
+                $gte: parsedStartDate,
+                $lte: parsedEndDate
+            }
+        }).sort({ isFavorite: -1 });
+
+        return res.status(200).json({ stories: filteredMemories });
+    } catch (err) {
+        return res.status(500).json({ message: "An error occurred", error: err.message });
+    }
+});
+
+
 //Serve static files from the uploads and assests directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/assets", express.static(path.join(__dirname, "assets")));

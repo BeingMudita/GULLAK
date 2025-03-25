@@ -15,3 +15,17 @@
     overflow-x: hidden;
   }
 }
+
+@layer components{
+  .input-box{
+    @apply w-full text-sm bg-[#F0E4D3] border border-[#A38A6D] rounded-lg px-5 py-3 mb-4 outline-none focus:ring-2 focus:ring-[#8E7654] shadow-sm;
+  }
+
+  .btn-primary{
+    @apply w-full text-sm font-medium bg-[#8E7654] text-white shadow-md rounded-full py-3 transition-all duration-300 ease-in-out hover:bg-[#6D5641] hover:shadow-lg;
+  }
+
+  .btn-secondary{
+    @apply w-full text-sm font-medium bg-[#A38A6D] text-[#6D5641] shadow-md rounded-full py-3 transition-all duration-300 ease-in-out hover:bg-[#8E7654] hover:text-white;
+  }
+}
