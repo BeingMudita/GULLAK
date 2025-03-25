@@ -1,5 +1,14 @@
 import React from "react";
-const Login = () => {
-  return <div>Login</div>;
+import Navbar from "../../components/Navbar";
+
+
+const Home = () => {
+  return(
+    <>
+    <Navbar />
+    </>
+  )
 };
-export default Login;
+
+
+export default Home;
