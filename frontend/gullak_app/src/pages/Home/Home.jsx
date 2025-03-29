@@ -3,11 +3,21 @@ import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import TravelStoryCard from "../../components/Cards/TravelStoryCard";
+import Modal from "react-modal";
+import { MdAdd } from "react-icons/md";
+import {ToastContainer, toast} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css";
+import AddEditTravelStory from "./AddEditTravelStory";
 
 const Home = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = React.useState(null);
   const [allMemories, setAllMemories] = React.useState([]);
+  const [openAddEditModal, setOpenAddEditModal] = React.useState({
+    isShown : false,
+    type: "add",
+    data: null,
+  });
 
   // Get user info from local storage
   const getUserInfo = async () => {
@@ -65,11 +75,16 @@ const Home = () => {
           // **Sort immediately so liked ones come first**
           return updatedMemories.sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite));
         });
+  
+        // **Show toast notification**
+        toast.success(newFavoriteStatus ? "Added to Favorites!" : "Removed from Favorites!");
       }
     } catch (err) {
       console.error("Error updating favourite status:", err.response?.data || err);
+      toast.error("Failed to update favorite status! ");
     }
   };
+  
   
   
   
@@ -109,6 +124,35 @@ const Home = () => {
         </div>
         <div className="w-[320px]"></div>
       </div>
+
+      {/* Add & Edit Travel Story model */}
+      <Modal
+        isOpen= {openAddEditModal.isShown}
+        onRequestClose={() => {}}
+        style ={{
+          overlay:{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 999
+          }
+        }}
+        appElement={document.getElementById("root")}
+        className="model-box"
+
+      >
+        <AddEditTravelStory />
+      </Modal>
+
+      <button className="w-16 h-16 flex items-center justify-center rounded-full bg-[#C4A98D] fixed bottom-10 right-10 shadow-lg hover:shadow-xl transition duration-300 ease-in-out z-10"
+      onClick={() => {
+        setOpenAddEditModal({
+          isShown: true,
+          type: "add",
+          data: null,
+        });
+      }}>
+        <MdAdd className="text-[32px] text-white"/>
+      </button>
+      <ToastContainer/>
     </>
   );
 };
