@@ -139,7 +139,12 @@ const Home = () => {
         className="model-box"
 
       >
-        <AddEditTravelStory />
+        <AddEditTravelStory 
+          type = {openAddEditModal.type}
+          storyInfo = {openAddEditModal.data}
+          onClose = {()=> setOpenAddEditModal({isShown: false, type: "add", data: null})}
+          getAllTravelStory = {getAllMemories}  
+        />
       </Modal>
 
       <button className="w-16 h-16 flex items-center justify-center rounded-full bg-[#C4A98D] fixed bottom-10 right-10 shadow-lg hover:shadow-xl transition duration-300 ease-in-out z-10"

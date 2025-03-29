@@ -16,6 +16,19 @@
   }
 }
 
+/* Custom scroll bar */
+.scrollbar::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #8E7654;
+  border-radius: 3px;
+}
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #F0E4D3;
+}
+
 @layer components{
   .input-box{
     @apply w-full text-sm bg-[#F0E4D3] border border-[#A38A6D] rounded-lg px-5 py-3 mb-4 outline-none focus:ring-2 focus:ring-[#8E7654] shadow-sm;
@@ -35,5 +48,9 @@
 
   .icon-button{
     @apply text-[22px] text-slate-300 cursor-pointer hover:text-red-500;
+  }
+
+  .model-box{
+    @apply w-[80vw] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll scrollbar z-50;
   }
 }
