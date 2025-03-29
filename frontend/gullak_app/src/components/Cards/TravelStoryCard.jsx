@@ -1,7 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const TravelStoryCard = ({ item }) => {
+const TravelStoryCard = ({ imageUrl, 
+    title,
+    story,
+    date,
+    withPerson,
+    isFavorite,
+    onFavouriteClick,
+    onClick
+ }) => {
     return (
         <div>
             TravelStoryCard

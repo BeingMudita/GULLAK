@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
+import TravelStoryCard from "../../components/Cards/TravelStoryCard";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Home = () => {
         setUserInfo(response.data.user);
       }
     } catch (err) {
-      if (err.response.status === 401 ) {
+      if (err.response?.status === 401) {
         localStorage.clear();
         navigate("/login"); // Redirect if unauthorized
       }
@@ -25,16 +26,27 @@ const Home = () => {
 
   // Get all memories from the server
   const getAllMemories = async () => {
-    try{
+    try {
       const response = await axiosInstance.get("/get-memory");
       if (response.data && response.data.memories) {
         setAllMemories(response.data.memories);
       }
-    }catch(err){
+    } catch (err) {
       console.log("Error fetching memories:", err);
     }
+  };
+
+  // Handle edit memory
+  const handleEdit = (data) => {
+  };
+
+  // Handle view memory
+  const handleViewMemory = (data) => {
   }
-  
+
+  // Handle update favourite status
+  const updateisFavourite = async (data) => {}
+
 
   useEffect(() => {
     getUserInfo();
@@ -43,23 +55,33 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo = {userInfo} />
+      <Navbar userInfo={userInfo} />
 
       <div className="container mx-auto py-10">
         <div className="flex gap-7">
           {allMemories.length > 0 ? (
             <div className="grid grid-cols-2 gap-4">
-              {allMemories.map((item) => (
-              <TravelStoryCard key={item._id} />
-            ))}
+              {allMemories.map((item) => {
+                return (
+                  <TravelStoryCard key={item._id}
+                  imageUrl = {item.imageUrl}
+                  title = {item.title}
+                  story = {item.story}
+                  date = {item.memoryDate}
+                  withPerson = {item.withPerson}
+                  isFavorite = {item.isFavorite}
+                  onEdit ={()=> handleEdit(item)}
+                  onClick ={()=> handleViewMemory(item)} 
+                  onFavouriteClick ={()=> updateisFavourite(item)}/>
+                );
+              })}
             </div>
           ) : (
             <>Empty card here</>
-        )}
+          )}
         </div>
         <div className="w-[320px]"></div>
       </div>
-      
     </>
   );
 };
