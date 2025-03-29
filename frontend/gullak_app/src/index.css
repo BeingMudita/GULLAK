@@ -28,4 +28,12 @@
   .btn-secondary{
     @apply w-full text-sm font-medium bg-[#A38A6D] text-[#6D5641] shadow-md rounded-full py-3 transition-all duration-300 ease-in-out hover:bg-[#8E7654] hover:text-white;
   }
+
+  .login-ui-box{
+    @apply w-80 h-[450px] rounded-full bg-primary absolute rotate-45;
+  }
+
+  .icon-button{
+    @apply text-[22px] text-slate-300 cursor-pointer hover:text-red-500;
+  }
 }

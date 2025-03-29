@@ -28,8 +28,10 @@ const Home = () => {
   const getAllMemories = async () => {
     try {
       const response = await axiosInstance.get("/get-memory");
-      if (response.data && response.data.memories) {
-        setAllMemories(response.data.memories);
+      console.log("Memories response:", response.data); // Debugging
+  
+      if (response.data && response.data.stories) {
+        setAllMemories(response.data.stories); // Change from response.data.memories
       }
     } catch (err) {
       console.log("Error fetching memories:", err);
@@ -45,8 +47,33 @@ const Home = () => {
   }
 
   // Handle update favourite status
-  const updateisFavourite = async (data) => {}
-
+  const updateisFavourite = async (data) => {
+    const storyId = data._id;
+    const newFavoriteStatus = !data.isFavorite; // Toggle like/dislike
+  
+    try {
+      const response = await axiosInstance.put(`/update-is-favourite/${storyId}`, {
+        isFavorite: newFavoriteStatus,
+      });
+  
+      if (response.data && response.data.message === "Memory updated successfully") {
+        setAllMemories((prev) => {
+          const updatedMemories = prev.map((item) =>
+            item._id === storyId ? { ...item, isFavorite: newFavoriteStatus } : item
+          );
+  
+          // **Sort immediately so liked ones come first**
+          return updatedMemories.sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite));
+        });
+      }
+    } catch (err) {
+      console.error("Error updating favourite status:", err.response?.data || err);
+    }
+  };
+  
+  
+  
+  
 
   useEffect(() => {
     getUserInfo();
