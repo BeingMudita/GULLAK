@@ -323,6 +323,8 @@ app.get("/memory/filter", authenticateToken, async (req, res) => {
 //Serve static files from the uploads and assests directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
+app.use(express.json()); // Enable JSON parsing
+
 
 app.listen(8000);
 module.exports = app;

@@ -6,6 +6,7 @@ import TagInput from "../../components/Input/TagInput";
 import axiosInstance from "../../utils/axiosInstance";
 import moment from "moment";
 import { toast } from "react-toastify";
+import uploadImage from "../../utils/uploadImage";
 
 const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
 
@@ -36,7 +37,7 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
                 story,
                 imageUrl: imageUrl || "",
                 withPerson,
-                date: date
+                memoryDate: date
                 ? moment(date).valueOf()
                 : moment().valueOf(),
             });
