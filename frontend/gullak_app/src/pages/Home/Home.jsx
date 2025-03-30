@@ -8,6 +8,7 @@ import { MdAdd } from "react-icons/md";
 import {ToastContainer, toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import AddEditTravelStory from "./AddEditTravelStory";
+import ViewMemory from "./viewMemory";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -16,6 +17,11 @@ const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = React.useState({
     isShown : false,
     type: "add",
+    data: null,
+  });
+
+  const[openViewModal, setOpenViewModal] = React.useState({
+    isShown : false,
     data: null,
   });
 
@@ -50,10 +56,15 @@ const Home = () => {
 
   // Handle edit memory
   const handleEdit = (data) => {
+
   };
 
   // Handle view memory
   const handleViewMemory = (data) => {
+    setOpenViewModal({
+      isShown: true,
+      data
+    });
   }
 
   // Handle update favourite status
@@ -112,7 +123,6 @@ const Home = () => {
                   date = {item.memoryDate}
                   withPerson = {item.withPerson}
                   isFavorite = {item.isFavorite}
-                  onEdit ={()=> handleEdit(item)}
                   onClick ={()=> handleViewMemory(item)} 
                   onFavouriteClick ={()=> updateisFavourite(item)}/>
                 );
@@ -125,7 +135,7 @@ const Home = () => {
         <div className="w-[320px]"></div>
       </div>
 
-      {/* Add & Edit Travel Story model */}
+      {/* Add & Edit memory model */}
       <Modal
         isOpen= {openAddEditModal.isShown}
         onRequestClose={() => {}}
@@ -145,6 +155,32 @@ const Home = () => {
           onClose = {()=> setOpenAddEditModal({isShown: false, type: "add", data: null})}
           getAllTravelStory = {getAllMemories}  
         />
+      </Modal>
+      
+      {/* View memory */}
+      <Modal
+        isOpen= {openViewModal.isShown}
+        onRequestClose={() => {}}
+        style ={{
+          overlay:{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 999
+          }
+        }}
+        appElement={document.getElementById("root")}
+        className="model-box"
+      >
+        <ViewMemory
+          storyInfo = {openViewModal.data|| null}
+          onClose={()=>{
+            setOpenViewModal((prevState)=>({...prevState, isShown: false}));
+          }}
+          onEditClick={()=>{
+            setOpenViewModal((prevState)=>({...prevState, isShown: false}));
+            handleEdit(openViewModal.data|| null);
+          }}
+          onDeleteClick={()=>{}}>
+        </ViewMemory>
       </Modal>
 
       <button className="w-16 h-16 flex items-center justify-center rounded-full bg-[#C4A98D] fixed bottom-10 right-10 shadow-lg hover:shadow-xl transition duration-300 ease-in-out z-10"

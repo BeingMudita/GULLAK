@@ -68,7 +68,7 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
     const handleDeleteMemoImage = () => {}
     
     return(
-        <div>
+        <div className="relative ">
             <div className="flex items-center justify-between">
                 <h5 className="text-xl font-medium text-slate-700">
                     {type === "add" ? "Add Memory " : "Edit Travel Story"} 
