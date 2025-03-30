@@ -4,7 +4,77 @@
 @tailwind components;
 @tailwind utilities;
 
+.rdp-root {
+  --rdp-accent-color: #D2B48C; /* Warm beige */
+  --rdp-accent-color-foreground: #5A3E2B; /* Dark brown */
+  --rdp-accent-color-hover: #8E7654; /* Light brown hover */
+  --rdp-accent-color-foreground-hover: #FFFFFF; /* White text on hover */
+  --rdp-accent-color-active: #8B4513; /* Darker brown for selection */
+  --rdp-accent-background: #F8F1E9; /* Softer background */
+  --rdp-day-button-border-radius: 0.4rem; /* Slight rounding */
+  --rdp-day-button-background: #F8F1E9;
+  --rdp-font-family: "Poppins", sans-serif;
+}
+
+/* Smaller calendar container */
+.rdp {
+  border: 1px solid #D2B48C;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background: #FFFFFF;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 12px; /* Smaller text */
+  max-width: 250px; /* Reduce width */
+}
+
+/* Days */
+.rdp-day {
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+  padding: 0.2rem;
+  border-radius: var(--rdp-day-button-border-radius);
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.rdp-day:hover {
+  background-color: var(--rdp-accent-color-hover);
+  color: var(--rdp-accent-color-foreground-hover);
+}
+
+/* Selected day */
+.rdp-day_selected {
+  background-color: var(--rdp-accent-color-active);
+  color: white;
+  font-weight: bold;
+}
+
+/* Disabled days */
+.rdp-day_disabled {
+  color: #B0A8A3;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Navigation buttons */
+.rdp-nav_button {
+  background: var(--rdp-accent-background);
+  color: var(--rdp-accent-color-foreground);
+  border-radius: 50%;
+  padding: 0.2rem;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.rdp-nav_button:hover {
+  background: var(--rdp-accent-color-active);
+  color: white;
+}
+
+
 @layer base{
+
   html{
     font-family: 'Poppins', sans-serif;
 
@@ -52,5 +122,17 @@
 
   .model-box{
     @apply w-[80vw] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll scrollbar z-50;
+  }
+
+  .btn-small{
+    @apply flex items-center gap-1 text-xs font-medium bg-[#D2B48C]/40 text-[#8B4513] shadow-md border border-[#8B4513] rounded py-2 px-4 transition-all duration-300 ease-in-out hover:bg-[#8B4513] hover:text-white; 
+  }
+
+  .btn-delete{
+    @apply bg-rose-50 text-rose-500 shadow-rose-100/0 border border-rose-100 hover:bg-rose-500 hover:text-white rounded-lg py-2 px-4 transition-all duration-300 ease-in-out;
+  }
+
+  .input-label{
+    @apply text-xs text-[#8B4513] font-medium mb-2;
   }
 }
