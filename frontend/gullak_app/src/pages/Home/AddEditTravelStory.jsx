@@ -10,11 +10,11 @@ import uploadImage from "../../utils/uploadImage";
 
 const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
 
-    const [title, setTitle] = React.useState("");
-    const [storyimage, setStoryImage] = React.useState(null);
-    const [story, setStory] = React.useState("");
-    const [withPerson, setWithPerson] = React.useState([]);
-    const [date, setDate] = React.useState(null);
+    const [title, setTitle] = React.useState(storyInfo ?.title || ""); 
+    const [storyimage, setStoryImage] = React.useState(storyInfo?.imageUrl ||null);
+    const [story, setStory] = React.useState(storyInfo?.story || "");
+    const [withPerson, setWithPerson] = React.useState(storyInfo?.withPerson || []);
+    const [date, setDate] = React.useState(storyInfo?.memoryDate||null);
     const [error, setError] = React.useState("");
 
     //Update Memory
@@ -26,7 +26,7 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
     const addMemory = async () => {
         try{
             let imageUrl = "";
-            //Uplad image
+            //Upload image
             if(storyimage){
                 const imgUpLoadRes = await uploadImage(storyimage);
                 imageUrl = imgUpLoadRes.imageUrl ||"";
@@ -71,7 +71,7 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
         <div className="relative ">
             <div className="flex items-center justify-between">
                 <h5 className="text-xl font-medium text-slate-700">
-                    {type === "add" ? "Add Memory " : "Edit Travel Story"} 
+                    {type === "add" ? "Add Memory " : "Update Memory"} 
                 </h5>
                 <div>
                     <div className="flex items-center gap-3  text-[#8B4513] bg-[#D2B48C]/40 p-2 rounded-l-lg">

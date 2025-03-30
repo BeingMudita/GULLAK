@@ -57,7 +57,7 @@ const ImageSelector = ({ image, setImage , handleDeleteImage}) => {
                     <img
                         src={previewUrl}
                         alt="Selected"
-                        className="w-full h-[300px] object-cover rounded-lg"
+                        className="w-full h-full object-cover rounded-lg"
                     />
                     <button className="btn-small btn-delete absolute top-2 right-2" onClick={handleRemoveImage}>
                         <MdDeleteOutline className="text-lg" />

@@ -56,7 +56,11 @@ const Home = () => {
 
   // Handle edit memory
   const handleEdit = (data) => {
-
+    setOpenAddEditModal({
+      isShown: true,
+      type: "edit",
+      data: data,
+    });
   };
 
   // Handle view memory
