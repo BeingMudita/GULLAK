@@ -100,6 +100,21 @@ const Home = () => {
     }
   };
   
+  // Delete Memory
+  const deleteMemory = async (data) => {
+    const storyId = data._id;
+    try {
+      const response = await axiosInstance.delete(`/delete-memory/${storyId}`);
+      if(response.data && !response.data/error){
+        toast.error("Story deleted successfully!");
+        setOpenViewModal((prevState)=>({...prevState, isShown: false}));
+        getAllMemories();
+      }
+    }catch(error){
+      console.log("Something went wrong. Please try again.");
+    }
+
+  }
   
   
   
@@ -184,7 +199,9 @@ const Home = () => {
             setOpenViewModal((prevState)=>({...prevState, isShown: false}));
             handleEdit(openViewModal.data|| null);
           }}
-          onDeleteClick={()=>{}}>
+          onDeleteClick={()=>{
+            deleteMemory(openViewModal.data || null);
+          }}>
         </ViewMemory>
       </Modal>
 
