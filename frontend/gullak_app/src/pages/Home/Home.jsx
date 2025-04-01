@@ -15,6 +15,7 @@ import EmptyCard from "../../components/Cards/EmptyCard";
 const Home = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [filterType, setFilterType] = React.useState("")
   const [userInfo, setUserInfo] = React.useState(null);
   const [allMemories, setAllMemories] = React.useState([]);
   const [openAddEditModal, setOpenAddEditModal] = React.useState({
@@ -121,6 +122,25 @@ const Home = () => {
   
   //Search Memory
   const onSearchStory = async (query) => {
+    try {
+      const response = await axiosInstance.get(`/search`, {
+        params: {
+          query,
+        }
+      });
+      if(response.data && response.data.stories){
+        setFilterType("search");
+        setAllMemories(response.data.stories);
+      }
+      
+    }catch(error){
+      console.log("Something went wrong. Please try again.");
+    }
+  }
+
+  const handleClearSearch = () => {
+    setFilterType("");
+    getAllMemories();
 
   }
   
@@ -135,7 +155,7 @@ const Home = () => {
   return (
     <>
       <Navbar userInfo={userInfo} searchQuery={searchQuery} setSearchQuery={setSearchQuery}
-      handleSearch = {onSearchStory} 
+      onSearchNote = {onSearchStory} handleClearSearch={handleClearSearch}
       />
 
       <div className="container mx-auto py-10">
@@ -160,7 +180,19 @@ const Home = () => {
             <EmptyCard message="Start you digital journal! Click the ADD button to start... Lets get started"/>
           )}
         </div>
-        <div className="w-[320px]"></div>
+        <div className="w-[320px]">
+          <div className="bg-white border border-slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
+            <div className="p-3">
+              <DayPicker
+                captionLayout = "dropdown-button"
+                mode= "range"
+                selected = {dateRange}
+                onSelect= {handleDayClick}
+                pagedNavigation 
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Add & Edit memory model */}
