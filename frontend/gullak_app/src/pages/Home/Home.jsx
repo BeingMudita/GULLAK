@@ -158,6 +158,7 @@ const Home = () => {
           storyInfo = {openAddEditModal.data}
           onClose = {()=> setOpenAddEditModal({isShown: false, type: "add", data: null})}
           getAllTravelStory = {getAllMemories}  
+          setStories={setAllMemories}
         />
       </Modal>
       

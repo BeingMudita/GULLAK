@@ -8,7 +8,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import uploadImage from "../../utils/uploadImage";
 
-const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
+const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStory, setStories }) => {
 
     const [title, setTitle] = React.useState(storyInfo ?.title || ""); 
     const [storyimage, setStoryImage] = React.useState(storyInfo?.imageUrl ||null);
@@ -60,7 +60,7 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
     
         try {
             let imageUrl = storyInfo.imageUrl || "";
-            
+    
             if (storyimage && typeof storyimage === "object") {
                 const uploadImageRes = await uploadImage(storyimage);
                 imageUrl = uploadImageRes.imageUrl || "";
@@ -79,21 +79,23 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
             if (response.data && response.data.story) {
                 toast.success("Memory updated successfully");
     
-                // Update the memory in state immediately
-                setStories((prevStories) =>
-                    prevStories.map((story) =>
-                        story._id === storyId ? { ...story, ...response.data.story } : story
-                    )
-                );
+                if (setStories) {
+                    setStories((prevStories) =>
+                        prevStories.map((story) =>
+                            story._id === storyId ? { ...story, ...updatedStory } : story
+                        )
+                    );
+                } else {
+                    getAllTravelStory(); // Fallback if `setStories` is not available
+                }
     
-                onClose(); // Close the update modal
+                onClose(); // Close modal
             }
         } catch (err) {
             setError(err.response?.data?.message || "Something went wrong. Please try again.");
         }
     };
     
-
     
     const handleAddOrUpdateClick = async () => {
         if(!title || !story){
@@ -108,7 +110,29 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
         }
 
     }
-    const handleDeleteMemoImage = () => {}
+    const handleDeleteMemoImage = async() => {
+        //Delete the image
+        const deleteImgRes = await axiosInstance.delete("/delete-image", {
+            params:{
+                imageUrl: storyInfo.imageUrl,
+            },
+        });
+        if(deleteImgRes.data){
+            const storyId = storyInfo._id;
+            const postData = {
+                title,
+                story,
+                withPerson,
+                memoryDate: moment().valueOf(),
+                imageUrl: "",
+
+            }
+            //Updating Story
+            const response = await axiosInstance.put("/edit-memory/" +storyId, postData);
+            setStoryImage(null);
+            
+        }
+    }
     
     return(
         <div className="relative ">

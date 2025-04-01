@@ -182,7 +182,7 @@ app.put("/edit-memory/:id", authenticateToken, async (req, res) => {
     const {userId} = req.user;
 
     // Validate required fields
-    if (!title || !story || !withPerson || !imageUrl || !memoryDate) {
+    if (!title || !story || !withPerson || !memoryDate) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
