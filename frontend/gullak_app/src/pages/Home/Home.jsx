@@ -10,12 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewMemory from "./viewMemory";
 import EmptyCard from "../../components/Cards/EmptyCard";
+import { DayPicker } from 'react-day-picker';
 
 
 const Home = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = React.useState("");
   const [filterType, setFilterType] = React.useState("")
+  const[dateRange, setDateRange] = React.useState({form: null, to:null})
   const [userInfo, setUserInfo] = React.useState(null);
   const [allMemories, setAllMemories] = React.useState([]);
   const [openAddEditModal, setOpenAddEditModal] = React.useState({
@@ -143,6 +145,8 @@ const Home = () => {
     getAllMemories();
 
   }
+
+  
   
   
   
@@ -180,19 +184,7 @@ const Home = () => {
             <EmptyCard message="Start you digital journal! Click the ADD button to start... Lets get started"/>
           )}
         </div>
-        <div className="w-[320px]">
-          <div className="bg-white border border-slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
-            <div className="p-3">
-              <DayPicker
-                captionLayout = "dropdown-button"
-                mode= "range"
-                selected = {dateRange}
-                onSelect= {handleDayClick}
-                pagedNavigation 
-              />
-            </div>
-          </div>
-        </div>
+        
       </div>
 
       {/* Add & Edit memory model */}
