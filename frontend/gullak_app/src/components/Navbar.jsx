@@ -3,7 +3,8 @@ import React from "react";
 import LOGO from "../assets/images/logo.png";
 import ProfileInfo from "./Cards/ProfileInfo";
 import { useNavigate } from "react-router-dom";
-import { search } from "../../../../backend";
+// import { search } from "../../../../backend";
+import SearchBar from "./Input/SearchBar";
 
 const Navbar = ({userInfo, searchQuery, setSearchQuery}) => {
 
