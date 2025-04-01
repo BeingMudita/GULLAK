@@ -18,9 +18,7 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
     const [error, setError] = React.useState("");
 
     //Update Memory
-    const updateMemory = async () => {
-
-    }
+    // Removed duplicate declaration
 
     //Add Memory
     const addMemory = async () => {
@@ -48,9 +46,54 @@ const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStory })=>{
                 onClose();
             }
         }catch(err){
-            console.log(err);
+            if(err.response && err.response.data && err.response.data.message){
+                setError(err.response.data.message);
+            }else{
+                setError("Something went wrong. Please try again.");
+            }
         }
     }
+
+    // Update Memory
+    const updateMemory = async () => {
+        const storyId = storyInfo._id;
+    
+        try {
+            let imageUrl = storyInfo.imageUrl || "";
+            
+            if (storyimage && typeof storyimage === "object") {
+                const uploadImageRes = await uploadImage(storyimage);
+                imageUrl = uploadImageRes.imageUrl || "";
+            }
+    
+            const updatedStory = {
+                title,
+                story,
+                imageUrl,
+                withPerson,
+                memoryDate: date ? moment(date).valueOf() : moment().valueOf(),
+            };
+    
+            const response = await axiosInstance.put(`/edit-memory/${storyId}`, updatedStory);
+    
+            if (response.data && response.data.story) {
+                toast.success("Memory updated successfully");
+    
+                // Update the memory in state immediately
+                setStories((prevStories) =>
+                    prevStories.map((story) =>
+                        story._id === storyId ? { ...story, ...response.data.story } : story
+                    )
+                );
+    
+                onClose(); // Close the update modal
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || "Something went wrong. Please try again.");
+        }
+    };
+    
+
     
     const handleAddOrUpdateClick = async () => {
         if(!title || !story){
