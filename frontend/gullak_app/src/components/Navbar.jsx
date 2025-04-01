@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 // import { search } from "../../../../backend";
 import SearchBar from "./Input/SearchBar";
 
-const Navbar = ({userInfo, searchQuery, setSearchQuery}) => {
+const Navbar = ({userInfo, searchQuery, setSearchQuery, onSearchNote, handleClearSearch }) => {
 
     const isToken = localStorage.getItem("token");
     const Navigate = useNavigate();
@@ -17,10 +17,16 @@ const Navbar = ({userInfo, searchQuery, setSearchQuery}) => {
     }
 
     const handleSearch = ()=>{
+        if(searchQuery){
+            onSearchNote(searchQuery);
+        }
 
     }
 
-    const onClearSearch = ()=>{}
+    const onClearSearch = ()=>{
+        handleClearSearch();
+        setSearchQuery("");
+    }
 
     return (
         <div className="bg-[#C4A98D] flex items-center justify-between px-6 py-2 drop-shadow sticky top-0 z-10">

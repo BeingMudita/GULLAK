@@ -119,6 +119,10 @@ const Home = () => {
 
   }
   
+  //Search Memory
+  const onSearchStory = async (query) => {
+
+  }
   
   
   
@@ -130,7 +134,9 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+      <Navbar userInfo={userInfo} searchQuery={searchQuery} setSearchQuery={setSearchQuery}
+      handleSearch = {onSearchStory} 
+      />
 
       <div className="container mx-auto py-10">
         <div className="flex gap-7">
