@@ -9,9 +9,12 @@ import {ToastContainer, toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewMemory from "./viewMemory";
+import EmptyCard from "../../components/Cards/EmptyCard";
+
 
 const Home = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = React.useState("");
   const [userInfo, setUserInfo] = React.useState(null);
   const [allMemories, setAllMemories] = React.useState([]);
   const [openAddEditModal, setOpenAddEditModal] = React.useState({
@@ -127,7 +130,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar userInfo={userInfo} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
 
       <div className="container mx-auto py-10">
         <div className="flex gap-7">
@@ -148,7 +151,7 @@ const Home = () => {
               })}
             </div>
           ) : (
-            <>Empty card here</>
+            <EmptyCard message="Start you digital journal! Click the ADD button to start... Lets get started"/>
           )}
         </div>
         <div className="w-[320px]"></div>
