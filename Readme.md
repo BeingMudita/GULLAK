@@ -1,6 +1,6 @@
 # 🏺 GULLAK - Your Personal Memory Vault 🏺
 
-GULLAK is a MERN (MongoDB, Express, React, Node.js) web application that allows users to store and cherish their memories. Users can add, update, and delete memories, upload photos, and search for memories by a specific date or date range.
+GULLAK is a MERN (MongoDB, Express, React, Node.js) web application that allows users to store and cherish their memories. Users can add, update, and delete memories, upload photos, and search for memories by a specific person or the with whom they shared the memory.
 
 ## ✨ Features
 
@@ -30,7 +30,7 @@ GULLAK is a MERN (MongoDB, Express, React, Node.js) web application that allows 
    ```sh
    cd backend
    npm install
-   cd ../frontend
+   cd ../frontend/gullak_app
    npm install
    ```
 
@@ -48,19 +48,17 @@ GULLAK is a MERN (MongoDB, Express, React, Node.js) web application that allows 
 
 5. Start the frontend server:
    ```sh
-   cd frontend
+   cd frontend/gullak_app
    npm start
    ```
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:8000](http://localhost:8000) in your browser.
 
 ## 🛠 Tech Stack
 - 🎨 **Frontend**: React.js
 - ⚙ **Backend**: Node.js, Express.js
 - 🗄 **Database**: MongoDB
 - 🔐 **Authentication**: JWT (JSON Web Tokens)
-- ☁ **Storage**: Cloudinary (for image uploads, optional)
 
-## 🤝 Contribution
-We welcome contributions! Feel free to fork the repository and submit a pull request for any improvements.
-
+## Copy Right
+This project is created with love by beingmudita.
